@@ -1,4 +1,5 @@
 all:
-    for dir in */; do \
-        pdflatex -output-directory=$$dir $$dir/cheatsheet.tex; \
-    done
+	for dir in */; do \
+		mkdir -p $$dir/.build; \
+		pdflatex -output-directory=$$dir/.build $$dir/*.tex && mv $$dir/.build/*.pdf $$dir/; \
+	done
