@@ -1,0 +1,161 @@
+\documentclass[8pt,a4paper,landscape]{extarticle}
+\usepackage[margin=0.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+\titleformat{\section}{\large\bfseries\uppercase}{}{0pt}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0pt}{}
+\setlength{\columnsep}{0.5cm}
+\setlength{\parindent}{0pt}
+\setlist{nosep, leftmargin=*}
+
+\begin{document}
+\begin{multicols*}{3}
+
+    \begin{center}
+        \Large \textbf{QF1100 Midterm Cheatsheet}
+    \end{center}
+
+    \section{1. Theory of Interest}
+
+    \subsection{Accumulation \& Compounding}
+    \begin{itemize}
+        \item \textbf{Accumulation Function $a(t)$:} Value of \$1 at time $t$. $a(0)=1$. Value at $t = \text{Principal} \times a(t)$.
+        \item \textbf{Simple Interest:} $a(t) = 1 + rt$. Linear growth. Earns interest only on principal.
+        \item \textbf{Compound Interest:} $a(t) = (1 + r)^t$. Exponential growth. Earns interest on interest.
+        \item \textbf{Nominal Rate $r^{(p)}$:} Annual rate compounded $p$ times a year. Interest per period = $r^{(p)}/p$.
+        \item \textbf{Effective Rate $r_e$:} Actual interest in a year. $1 + r_e = (1 + r^{(p)}/p)^p$. For $p>1$, $r_e > r^{(p)}$. As $p$ increases, $r_e$ increases.
+        \item \textbf{Equivalent Rates:} Yield same accumulation over 1 year. \linebreak $(1 + r^{(p)}/p)^p = (1 + R^{(q)}/q)^q$.
+    \end{itemize}
+
+    \subsection{Continuous Compounding \& Force of Interest}
+    \begin{itemize}
+        \item \textbf{Continuous Rate:} As $p \to \infty$, $a(t) = \lim_{x \to \infty} \left(1 + \frac{r}{x}\right)^x = (e^{r)t}$.
+        \item \textbf{Equivalent Rates:} Yield same accumulation over 1 year. \linebreak $(1 + r^{(p)}/p)^p = (e^{r)t} = 1 + r_e$.
+        \item \textbf{Force of Interest $\delta(t)$:} Infinitesimal relative rate of change. $\delta(t) = \frac{a'(t)}{a(t)} = \frac{d}{dt}[\ln(a(t))]$.
+        \item \textbf{Accumulation with $\delta(t)$:} $a(t) = \exp(\int_0^t \delta(u) du)$.
+              \\ $a(s, t) := \frac{a(t)}{a(s)} = \exp \left( \int_{s}^{t} \delta(u) du \right) = \frac{\exp \left( \int_{0}^{t} \delta(u) du \right)}{\exp \left( \int_{0}^{s} \delta(u) du \right)}$
+        \item \textbf{Constant $\delta$:} If $\delta(t) = \delta$ (constant), then $a(t) = e^{\delta t}$. Here, $\delta = \ln(1+r_e)$.
+        \item \textbf{Consistency Principle:} $a(t_0, t_n) = a(t_0, t_1)a(t_1, t_2) \dots a(t_{n-1}, t_n)$.
+    \end{itemize}
+
+    \subsection{Present Value \& Equivalence}
+    \begin{itemize}
+        \item \textbf{Present Value (PV):} Value today ($t=0$). \\$PV = \sum_{i=1}^n \frac{c_i}{a(t_i)} = \sum_{i=1}^n \frac{c_i}{(1+r)^{t_i}}$. Discounting brings future value to present.
+        \item \textbf{Time Value ($TV_t$):} Value at time $t$. $TV_t(C) = PV(C) \times a(t) = TV_t(C) = \sum_{i=1}^n \frac{c_i}{(1 + r_i)^{t_i}} \cdot (1 + r)^{t} = \sum_{i=1}^n \frac{c_i}{(1 + r_i)^{t_i - t}}$. \\ Also, $TV_t(C) = \frac{a(t)}{a(s)} \cdot TV_s(C) = TV_s(C) \cdot (1 + r)^{t - s}$.
+        \item \textbf{Principle of Equivalence:} Two cash flows are equivalent if they have the exact same PV.
+        \item \textbf{Net Present Value (NPV):} PV of all inflows and outflows. A measure of value created today. Invest if $NPV > 0$. A is superior to B if NPV(A) $>$ NPV(B).
+    \end{itemize}
+
+    \subsection{Internal Rate of Return \& Equation of Value}
+    \begin{itemize}
+        \item \textbf{Equation of Value:} Set $NPV = \sum_{i = 0}^{n}\frac{c_i}{(1 + r)^{i}} = 0 $ for the cash flows.
+        \item \textbf{Internal Rate of Return (IRR):} Any non-negative root $r$ of the equation of value. It is independent of prevailing market rates.
+        \item \textbf{Uniqueness Theorem:} IRR is UNIQUE IF: (1) Initial cash flow $c_0 < 0$ (outflow), (2) All subsequent $c_k \ge 0$ (inflows), and (3) Total sum of cash flows $\sum_{i = 0}^{n}c_i > 0$.
+        \item \textbf{Decision Rule:} Invest if IRR $>$ required return rate. Use NPV in conjunction with IRR. A is superior to B if IRR(A) $>$ IRR(B).
+    \end{itemize}
+
+    \subsection{Newton-Raphson Method}
+    \begin{itemize}
+        \item Used to estimate IRR or bond yield when $n > 2$. Requires function to be differentiable. Has quadratic rate of convergence.
+        \item \textbf{Formula:} $\alpha_{n+1} = \alpha_n - \frac{f(\alpha_n)}{f'(\alpha_n)}$.
+        \item \textbf{Steps:} (1) Write PV equation $f(x)=0$ where $x = \frac{1}{1+r}$. (2) Find bounds $a,b$ where $f(a)$ and $f(b)$ have opposite signs. (3) Guess $x_0$. (4) Iterate.
+    \end{itemize}
+
+    \subsection{Annuities (Constant Payment $A$)}
+    \begin{itemize}
+        \item \textbf{Ordinary (Arrears):} Payments at END of periods. \\ $PV(OA) = \sum_{t = 1}^{n} \frac{A}{(1 + r)^{t}} = \frac{A}{r}[1 - \frac{1}{(1+r)^{n}}]$.
+        \item \textbf{Due (Advance):} Payments at BEGINNING of periods. \\ $PV(AD) = \sum_{t = 1}^{n} \frac{A}{(1 + r)^{t}} = \frac{A(1+r)}{r}[1 - (1+r)^{-n}] = PV_{OA} \times (1+r)$.
+        \item \textbf{Deferred Annuity:} Calculate PV at start of annuity (e.g., $t=k$), then discount back to $t=0$ by multiplying by $(1+r)^{-k}$.
+        \item \textbf{Perpetuity Ordinary / Immediate:} Infinite payments. \\ $PV = \sum_{t = 1}^{\infty} \frac{A}{(1 + r)^{t}} = \frac{A}{r}$.
+        \item \textbf{Perpetuity Due:} $PV = \sum_{t = 0}^{\infty} \frac{A}{(1 + r)^{t}} = \frac{A(1+r)}{r}$.
+        \item \textbf{Varying Annuities:} If payments change, split into two separate annuity streams or geometric progressions.
+    \end{itemize}
+
+    \subsection{Loans \& Repayment}
+    \begin{itemize}
+        \item Loan amount $L = PV$(installment payments) = $PV(C)$.
+        \item \textbf{$L_m^{Balance}:$} immediately after the mth installment been paid is $TV_m$.
+        \item \textbf{Prospective Balance:} PV(remaining payments) $t > m$. \\ $L_m^{Balance} = \frac{A}{r}[1 - \frac{1}{(1+r)^{n-m}}]$. (Does not need $L$).
+        \item \textbf{Retrospective Balance:} Accumulated loan minus accumulated payments. \\ $L_m^{Balance} = L(1+r)^m - \frac{A}{r}[(1+r)^m - 1]$. (Requires $L$).
+        \item \textbf{Drop Payment (Non-integer $n$):} Make $\lfloor n \rfloor$ full payments plus smaller final payment $B$. Find integer periods, subtract PV of full payments from $L$, then accrete remaining balance to the time of payment $B$.
+    \end{itemize}
+
+    \section{2. Bonds \& Term Structure}
+
+    \subsection{Bond Basics \& Risks}
+    \begin{itemize}
+        \item \textbf{$P$}: Current Price(Listed on market), \textbf{$F$}: Face/Par Value(coupon based on this), \textbf{$R$}: Redemption Value.
+        \item \textbf{$c$}: Nominal coupon rate, \textbf{$m$}: Periods/year.
+        \item \textbf{$n$}: Total periods, \textbf{$\lambda$}: Nominal yield.
+        \item \textbf{Coupon Payment:} $cF/m$.
+        \item \textbf{Law of One Price:} Price = PV of all future cash flows.
+        \item \textbf{Risks:} Default risk (failure to pay), Liquidity risk (cannot find buyer), Reinvestment risk (inability to invest coupons at required return).
+    \end{itemize}
+
+    \subsection{Bond Pricing Formulas}
+    \begin{itemize}
+        \item \textbf{General Price:} $P = \frac{R}{(1+\lambda/m)^n} + \sum_{i=1}^n \frac{cF/m}{(1+\lambda/m)^i}$.
+        \item \textbf{If $F = R$:} $P = F \left[ \frac{1}{(1 + \lambda / m)^n} + \frac{c/m}{\lambda / m} \left( 1 - \frac{1}{(1 + \lambda / m)^n} \right) \right] \\ = F + F\left(\frac{c-\lambda}{\lambda}\right)\left[1 - \frac{1}{(1+\lambda /m)^{n}}\right]$ \\ Typical that F = R (Unless otherwise stated)
+        \item \textbf{Makeham Formula:} $P = K + \frac{c}{\lambda}(F-K)$, where $K = \frac{R}{(1+\lambda/m)^{n}}$ (PV of redemption value).
+        \item \textbf{Recursive Price:} $P_{k+1} = P_k(1 + \lambda/m) - cF/m$ (Relates price between 2 successive periods).
+    \end{itemize}
+
+    \subsection{Bond Types \& Behaviors}
+    \begin{itemize}
+        \item \textbf{Premium:} $P > F \iff c > \lambda$.
+        \item \textbf{Par:} $P = F \iff c = \lambda$.
+        \item \textbf{Discount:} $P < F \iff c < \lambda$.
+        \item \textbf{Zero-Coupon:} $P = \frac{R}{(1+\lambda)^{N}}$ (No coupons).
+        \item \textbf{Perpetual (Consol):} $P = \frac{cF}{\lambda}$ ($n \to \infty$) (never matures).
+        \item \textbf{Singapore Savings Bonds (SSB):} Non-tradable, rates vary by year, early redemption lowers yield.
+        \item \textbf{SGS Bonds:} Tradable on market, no early redemption (must sell).
+        \item \textbf{Price-Yield Curve:} Price $P$ is a decreasing, convex function of yield $\lambda$. Max price is at $\lambda=0$ (sum of all undiscounted cash flows).
+    \end{itemize}
+
+    \subsection{Macaulay Duration ($D$)}
+    \begin{itemize}
+        \item Weighted average time to maturity. Measures price sensitivity to interest rate changes.
+        \item \textbf{Weights:} $w_i = \frac{PV(c_i, t_i)}{PV(C)}$. Higher PV means more weight placed on that specific time $t_i$.
+        \item \textbf{General:} $D = \frac{\sum t_i PV(c_i, t_i)}{PV(C)} = \sum w_i t_i$.
+        \item \textbf{Bounds:} $t_1 \le D \le t_n$.
+        \item \textbf{Zero-Coupon Bond:} $D = T$ (Maturity time).
+        \item \textbf{Duration:} $D = \frac{1}{P} \left[ \sum_{i=1}^{n} (\frac{(i/m)(cF/m)}{(1 + \lambda/m)^i}) + \frac{(n/m)R}{(1 + \lambda/m)^n} \right]$,
+              \\ where $P = \sum_{i=1}^{n} (\frac{cF/m}{(1 + \lambda/m)^i}) + \frac{R}{(1 + \lambda/m)^n}$.
+        \item \textbf{Bond Redeemable at Par ($R=F$):} \\ Let $\mu = \lambda/m$ and $\Upsilon = c/m$. \\
+              $D = \frac{1+\mu}{m\mu} - \frac{1+\mu + n(\Upsilon-\mu)}{m\Upsilon[(1+\mu)^n - 1] + m\mu}$.
+        \item \textbf{Bond Priced at Par ($P=F$, so $c = \lambda$, so $\mu=\Upsilon$):} \\ $D = \frac{1+\mu}{m\mu}[1 - \frac{1}{(1+\mu)^{n}}]$.
+        \item \textbf{Perpetual Bond Duration:} $D = \frac{1 + \mu}{m\mu} = \frac{1+\lambda/m}{\lambda}$, where $\lambda$ is nominal annual yield.
+        \item \textbf{Key Properties:} Duration is independent of the face value ($F$) and independent of the frequency of compounding.
+    \end{itemize}
+
+    \subsection{Yield Curves \& Term Structure}
+    \begin{itemize}
+        \item \textbf{Term Structure:} Relaxes constant interest rate assumption. Rates vary by time-to-maturity.
+        \item \textbf{Normal Yield Curve:} Upward sloping. Optimistic. Seen during economic expansions.
+        \item \textbf{Inverted Yield Curve:} Downward sloping. Rare. Seen during or just before recessions/high inflation.
+        \item \textbf{Spot Rate ($s_t$):} Annual interest rate for money held from $t=0$ to $t$. $a(t) = (1+s_t)^t$. It is the yield of a zero-coupon bond.
+        \item \textbf{Forward Rate ($f_{t_1, t_2}$):} Interest rate observed at $t_1$ lasting until $t_2$.
+        \item \textbf{Rate Relationship:} $(1+s_k)^k = (1+s_j)^j(1+f_{j,k})^{k-j}$.
+        \item \textbf{From yield of zero-coupon bond:} $P = \frac{R}{(1 + s_n)^{n}} \rightarrow \\ s_n = (\frac{R}{P})^{1/n} - 1$ .
+    \end{itemize}
+
+    \subsection{Bootstrap Method}
+    \begin{itemize}
+        \item Used to estimate missing spot rates using available coupon-paying bonds.
+        \item \textbf{Step 1:} Use 1-period zero-coupon bond to find $s_1$: $P_1 = \frac{R}{(1+s_1)}$.
+        \item \textbf{Step 2:} Use 2-period coupon bond to find $s_2$: $P_2 = \frac{cF/m}{1+s_1} + \frac{cF/m + R}{(1+s_2)^2}$.
+        \item \textbf{Step 3:} Repeat iteratively to find $s_3, s_4...s_n$.
+    \end{itemize}
+
+    \subsection{Arithmetic and Geometric}
+    \begin{itemize}
+        \item \textbf{Arithmetic Progression:} $S_n = \frac{n}{2} \left[ 2a + (n - 1)d \right]$.
+        \item \textbf{GP(n terms):} $S_n = a \frac{1 - r^n}{1 - r}$.
+        \item \textbf{GP(infinite terms:)} $S_{\infty} = \frac{a}{1 - r}$.
+    \end{itemize}
+
+\end{multicols*}
+\end{document}
