@@ -1,0 +1,526 @@
+\documentclass[6.5pt,landscape,a4paper]{extarticle}
+\usepackage[landscape,a4paper,top=3mm,bottom=3mm,left=3mm,right=3mm]{geometry}
+\usepackage{multicol}
+\usepackage{amsmath,amssymb}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{tabularx}
+
+% ---- layout ----
+\setlength{\columnsep}{2.5mm}
+\setlength{\columnseprule}{0.25pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4pt}
+\setlength{\abovedisplayskip}{1pt}
+\setlength{\belowdisplayskip}{1pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+\pagestyle{empty}
+
+% ---- colours ----
+\definecolor{hdr}{RGB}{20,60,140}
+\definecolor{sub}{RGB}{60,100,180}
+\definecolor{keyc}{RGB}{230,240,255}
+\definecolor{warnc}{RGB}{255,235,235}
+
+% ---- section headers ----
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+  {-1pt plus -0.3pt}{0.3pt plus 0.1pt}%
+  {\normalfont\bfseries\small\color{white}%
+   \setlength{\fboxsep}{1pt}\colorbox{hdr}}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+  {-0.8pt plus -0.3pt}{0.2pt plus 0.1pt}%
+  {\normalfont\bfseries\footnotesize\color{sub}}}
+\makeatother
+\setcounter{secnumdepth}{0}
+
+% ---- compact lists ----
+\setlist{nosep,leftmargin=*,topsep=0pt,itemsep=0pt,parsep=0pt}
+
+% ---- key result box ----
+\newmdenv[topline=false,bottomline=false,rightline=false,
+  linewidth=1.8pt,linecolor=hdr,
+  innertopmargin=1pt,innerbottommargin=1pt,
+  innerleftmargin=3pt,innerrightmargin=1pt,
+  skipabove=1pt,skipbelow=1pt,
+  backgroundcolor=keyc]{kbox}
+
+% ---- warn box ----
+\newmdenv[topline=false,bottomline=false,rightline=false,
+  linewidth=1.8pt,linecolor=red!70!black,
+  innertopmargin=1pt,innerbottommargin=1pt,
+  innerleftmargin=3pt,innerrightmargin=1pt,
+  skipabove=1pt,skipbelow=1pt,
+  backgroundcolor=warnc]{wbox}
+
+
+
+\begin{document}
+
+% ---- title bar ----
+\noindent\colorbox{hdr}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+  \color{white}\bfseries\small
+  QF1100 Introduction to Quantitative Finance --- Final Exam Cheatsheet
+  \hfill AY2025/2026
+}}
+\vspace{0.8mm}
+
+\begin{multicols}{4}
+\scriptsize
+
+%% =====================================================================
+\section{1.\ Theory of Interest}
+
+\subsection{Accumulation Functions}
+\textbf{Simple:} \(a(t)=1+rt\)\quad\textbf{Compound:} \(a(t)=(1+r)^t\) \textsf{[default]}
+
+\textbf{Continuous:} \(a(t)=e^{\delta t}\)
+
+\textbf{Accumulated value} of principal \(P\): \(A(t)=P\cdot a(t)\)
+
+\subsection{Frequency of Compounding}
+Nominal rate \(r^{(p)}\) paid \(p\) times/yr:
+\[a(t)=\Bigl(1+\tfrac{r^{(p)}}{p}\Bigr)^{pt}\]
+Effective annual rate:
+\[r_e=\Bigl(1+\tfrac{r^{(p)}}{p}\Bigr)^p - 1\]
+\textbf{Equivalence} of two nominal rates:
+\[\Bigl(1+\tfrac{r^{(p)}}{p}\Bigr)^p = \Bigl(1+\tfrac{R^{(q)}}{q}\Bigr)^q\]
+
+\begin{kbox}
+\(r_e > r^{(p)}\) for any \(p>1\). Continuous compounding maximises \(r_e\) for a given nominal rate.
+\end{kbox}
+
+\subsection{Force of Interest}
+\[\delta(t)=\frac{a'(t)}{a(t)}=\frac{d}{dt}\ln a(t)\]
+\begin{itemize}
+  \item Constant \(\delta\): \(a(t)=e^{\delta t}\), so \(\delta=\ln(1+r_e)\)
+  \item Convert: \(1+r_e=e^{\delta}\Rightarrow r_e=e^{\delta}-1\)
+\end{itemize}
+
+\subsection{Key Conversions (quick ref)}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Convert & Formula\\
+\midrule
+\(r^{(p)}\to r_e\) & \((1+r^{(p)}/p)^p-1\)\\
+\(r_e\to r^{(p)}\) & \(p[(1+r_e)^{1/p}-1]\)\\
+\(r_e\to\delta\) & \(\ln(1+r_e)\)\\
+\(\delta\to r_e\) & \(e^{\delta}-1\)\\
+\(r^{(p)}\to r^{(q)}\) & equate \((1+r^{(p)}/p)^p=(1+r^{(q)}/q)^q\)\\
+\bottomrule
+\end{tabular}
+
+%% =====================================================================
+\section{2.\ Present Value \& Cash Flows}
+
+\subsection{Present Value (single payment)}
+\[\mathrm{PV}=\frac{c}{a(t)}=\frac{c}{(1+r)^t}\]
+Discount factor: \(v=\frac{1}{1+r}\), so \(\mathrm{PV}=c\cdot v^t\)
+
+\subsection{PV of Cash Flow Stream}
+\(C=\{(c_i,t_i)\}_{i=1}^n\):
+\[\mathrm{PV}(C)=\sum_{i=1}^n\frac{c_i}{(1+r)^{t_i}}\]
+\textbf{Time value} at \(t\): \(\mathrm{TV}_t(C)=\mathrm{PV}(C)\cdot(1+r)^t\)
+
+\subsection{Annuities}
+Let \(r\) = effective rate per period, \(A\) = payment per period, \(n\) = number of periods.
+
+\textbf{Ordinary annuity} (payment at \emph{end} of each period):
+\[\mathrm{PV}=\frac{A}{r}\Bigl[1-\frac{1}{(1+r)^n}\Bigr]\]
+
+\textbf{Annuity-due} (payment at \emph{start} of each period):
+\[\mathrm{PV}=\frac{A(1+r)}{r}\Bigl[1-\frac{1}{(1+r)^n}\Bigr]\]
+\(\Rightarrow\) PV(due) \(=\) PV(ordinary) \(\times(1+r)\)
+
+\textbf{Perpetuity} (ordinary, payments at end):
+\[\mathrm{PV}=\frac{A}{r}\]
+
+\textbf{Perpetuity-due} (payments at start):
+\[\mathrm{PV}=\frac{A(1+r)}{r}\]
+
+\textbf{Future value} (ordinary annuity at \(t=n\)):
+\[\mathrm{FV}=\frac{A}{r}\bigl[(1+r)^n-1\bigr]\]
+
+\begin{wbox}
+\textbf{Rate mismatch:} Always convert nominal rate to \emph{effective rate per payment period} before applying annuity formula. E.g.\ 6\% p.a.\ convertible semi-annually \(\to\) effective monthly rate \(=(1+0.03)^{1/6}-1\).
+\end{wbox}
+
+\subsection{Growing Annuity}
+Payments grow at rate $g$ per period, $n$ periods, first payment $A$ at $t=1$:
+\[\mathrm{PV}=\frac{A}{r-g}\Bigl[1-\Bigl(\frac{1+g}{1+r}\Bigr)^n\Bigr]\quad(r\neq g)\]
+If $r=g$: $\mathrm{PV}=\frac{nA}{1+r}$.\quad Growing perpetuity ($r>g$): $\mathrm{PV}=\dfrac{A}{r-g}$.
+
+\subsection{Internal Rate of Return (IRR)}
+IRR is $r$ s.t.\ $\mathrm{PV}(C)=0$.
+
+\textbf{Uniqueness theorem:} If $c_0<0$, $c_k\ge0\;\forall k\ge1$, and $\sum c_k>0$, then IRR is unique.
+
+Newton--Raphson: $r_{n+1}=r_n - \dfrac{f(r_n)}{f'(r_n)}$
+
+\subsection{Loans \& Refinancing}
+Loan \(L\) repaid by \(n\) equal payments \(A\) at rate \(r\) per period:
+\[L=\frac{A}{r}\Bigl[1-\frac{1}{(1+r)^n}\Bigr]\quad\Rightarrow\quad A=\frac{Lr}{1-(1+r)^{-n}}\]
+
+\textbf{Loan balance after \(m\) payments} (prospective):
+\[L_m^{\text{bal}}=\frac{A}{r}\Bigl[1-\frac{1}{(1+r)^{n-m}}\Bigr]\]
+
+\textbf{Retrospective method:}
+\[L_m^{\text{bal}}=L(1+r)^m - \frac{A}{r}\bigl[(1+r)^m-1\bigr]\]
+
+\begin{kbox}
+Both methods give the same answer. Prospective is usually faster. Retrospective is useful when \(n\) is not given explicitly.
+\end{kbox}
+
+%% =====================================================================
+\section{3.\ Bonds}
+
+\subsection{Notation}
+\begin{tabular}{@{}ll@{}}
+\(F\) & face value (= \(R\) unless stated)\\
+\(R\) & redemption value\\
+\(c\) & nominal coupon rate (annual)\\
+\(m\) & coupon payments per year\\
+\(n\) & total coupon payments\\
+\(\lambda\) & nominal bond yield (annual)\\
+\(P\) & bond price\\
+\end{tabular}
+
+\subsection{Bond Pricing Formula}
+\begin{kbox}
+\[P=\frac{R}{(1+\lambda/m)^n}+\sum_{i=1}^n\frac{cF/m}{(1+\lambda/m)^i}\]
+\[=F\Biggl[\frac{1}{(1+\lambda/m)^n}+\frac{c/m}{\lambda/m}\Bigl(1-\frac{1}{(1+\lambda/m)^n}\Bigr)\Biggr]\quad(F=R)\]
+\end{kbox}
+
+\textbf{Premium/discount form} (when \(F=R\)):
+\[P=F+F\cdot\frac{c-\lambda}{\lambda}\Bigl[1-\frac{1}{(1+\lambda/m)^n}\Bigr]\]
+
+\begin{itemize}
+  \item \(c>\lambda\Rightarrow P>F\) (at premium)
+  \item \(c=\lambda\Rightarrow P=F\) (at par)
+  \item \(c<\lambda\Rightarrow P<F\) (at discount)
+\end{itemize}
+
+\subsection{Variable Coupon Bonds}
+Split into groups with constant coupon rate; price each group as a separate annuity + shared redemption PV.
+
+\begin{wbox}
+\textbf{Exam pattern (Q3 midterm):} Bond with different coupon rates for each 5-year block and \(R\neq F\). Price each block as an annuity discounted at yield \(\lambda\), then add PV of redemption at maturity.
+\end{wbox}
+
+\subsection{Determining Bond Yield (Newton--Raphson)}
+$f(\lambda)=P(\lambda)-P_{\text{market}}$, iterate $\lambda_{n+1}=\lambda_n - f(\lambda_n)/f'(\lambda_n)$.
+
+\[P(\lambda)=\frac{R}{(1+\lambda/m)^n}+\frac{cF/m}{\lambda/m}\Bigl[1-\frac{1}{(1+\lambda/m)^n}\Bigr]\]
+
+\begin{kbox}
+$f'(\lambda)$ for annual coupon bond ($m=1$, $F=R$):
+\[f'(\lambda)=-\sum_{i=1}^{n}\frac{i\cdot cF}{(1+\lambda)^{i+1}}-\frac{nF}{(1+\lambda)^{n+1}}=-\frac{D\cdot P(\lambda)}{1+\lambda}\]
+where $D$ = Macaulay duration. (In general: $f'(\lambda)=-\frac{D\cdot P}{m(1+\lambda/m)}$.)
+\end{kbox}
+
+Start: $\lambda_0=c$. Price--yield: \textbf{inverse} \& \textbf{convex} ($P\downarrow$ as $\lambda\uparrow$).
+
+\subsection{Macaulay Duration}
+\[D=\frac{\sum_{i=1}^n t_i\cdot\mathrm{PV}(c_i,t_i)}{\mathrm{PV}(C)}=\sum_{i=1}^n w_i t_i,\quad w_i=\frac{\mathrm{PV}(c_i)}{\mathrm{PV}(C)}\]
+
+\textbf{Special cases:}
+\begin{itemize}
+  \item Zero-coupon bond: \(D=T\) (maturity)
+  \item Perpetuity (\(m=1\)): \(D=\dfrac{1+\lambda}{\lambda}\)
+  \item Coupon bond at par (\(P=F=R\), annual): \(D=\dfrac{1+\lambda}{\lambda}\Bigl[1-\frac{1}{(1+\lambda)^n}\Bigr]\)
+\end{itemize}
+
+Properties: \(t_1\le D\le t_n\). Duration independent of \(F\).
+
+%% =====================================================================
+\section{4.\ Term Structure}
+
+\subsection{Spot Rates \& Forward Rates}
+\textbf{Spot rate} \(s_t\): effective annual rate from 0 to \(t\).
+Accumulation: \((1+s_t)^t\).
+
+\textbf{Forward rate} \(f_{j,k}\): rate from \(t=j\) to \(t=k\) (annual, same convention as spot).
+
+\begin{kbox}
+\textbf{No-arbitrage relation:}
+\[(1+s_k)^k=(1+s_j)^j(1+f_{j,k})^{k-j}\]
+Note: \(f_{0,t}=s_t\).
+\end{kbox}
+
+\textbf{Continuous compounding version:}
+\[e^{s_k k}=e^{s_j j}\cdot e^{f_{j,k}(k-j)}\quad\Rightarrow\quad f_{j,k}=\frac{s_k k - s_j j}{k-j}\]
+
+\subsection{Bootstrapping Spot Rates}
+Use observed coupon bond prices to extract \(s_1,s_2,\ldots\) sequentially:
+
+For a coupon bond with annual payments:
+\[P=\frac{c_1}{1+s_1}+\frac{c_2}{(1+s_2)^2}+\cdots+\frac{c_n+F}{(1+s_n)^n}\]
+Solve for the unknown \(s_n\) given \(s_1,\ldots,s_{n-1}\) already found.
+
+\begin{wbox}
+\textbf{Exam pattern:} Extract \(s_1,s_2\) from zero-coupon bond prices, then use coupon bond price to find \(s_3\), then compute \(f_{1,3}\).
+\end{wbox}
+
+\subsection{Yield Curve Shapes}
+Normal (upward): economic expansion, low inflation.\\
+Inverted (downward): pre-recession, high inflation.\\
+Flat term structure: all \(s_t\) equal \(\Rightarrow\) force of interest is constant.
+
+%% =====================================================================
+\section{5.\ Asset Returns \& Portfolios}
+
+\subsection{Returns}
+\textbf{Total return:} \(R=P_1/P_0\)\quad
+\textbf{Rate of return:} \(r=(P_1-P_0)/P_0\)\quad\(R=1+r\)
+
+\textbf{Short sell:} \(R_{\text{short}}=P_1/P_0\) (same formula -- negatives cancel).
+
+\subsection{Random Returns \& Key Identities}
+Mean: $\mu_i=E(r_i)$\quad Variance: $\sigma_i^2=\text{Var}(r_i)$
+
+Covariance: $\sigma_{ij}=\text{Cov}(r_i,r_j)$\quad Correlation: $\rho_{ij}=\dfrac{\sigma_{ij}}{\sigma_i\sigma_j}$
+
+\textbf{Var/Cov identities:}
+\begin{itemize}
+  \item $\text{Var}(aX+b)=a^2\text{Var}(X)$
+  \item $\text{Cov}(aX,bY)=ab\,\text{Cov}(X,Y)$
+  \item $\text{Var}(X+Y)=\text{Var}(X)+\text{Var}(Y)+2\text{Cov}(X,Y)$
+  \item $\text{Var}(X-Y)=\text{Var}(X)+\text{Var}(Y)-2\text{Cov}(X,Y)$
+\end{itemize}
+
+\textbf{Short-sell gain} (sell at $P_0$, buy back at $P_1$): profit $= P_0-P_1$. Rate of return $= (P_0-P_1)/P_0 = 1 - P_1/P_0 = -r_{\text{long}}$.\quad \textbf{Loss is unlimited.}
+
+\subsection{Portfolio of 2 Assets}
+Weights \(w_1=\alpha\), \(w_2=1-\alpha\) (\(\alpha\in\mathbb{R}\) if short-selling allowed; \(\alpha\in[0,1]\) otherwise).
+
+\[\mu_p=\alpha\mu_1+(1-\alpha)\mu_2\]
+\[\sigma_p^2=\alpha^2\sigma_1^2+(1-\alpha)^2\sigma_2^2+2\alpha(1-\alpha)\rho_{12}\sigma_1\sigma_2\]
+
+\subsection{Global Minimum-Variance Portfolio (GMVP)}
+\begin{kbox}
+\[\alpha^*=\frac{\sigma_2^2-\rho_{12}\sigma_1\sigma_2}{\sigma_1^2+\sigma_2^2-2\rho_{12}\sigma_1\sigma_2}\]
+\[(\sigma_p^2)^*=\frac{\sigma_1^2\sigma_2^2(1-\rho_{12}^2)}{\sigma_1^2+\sigma_2^2-2\rho_{12}\sigma_1\sigma_2}\]
+\end{kbox}
+
+If \(\rho=1\): feasible set is a straight line. If \(\rho=-1\): V-shape (zero variance achievable). If \(-1<\rho<1\): curved bullet shape.
+
+\textbf{Efficient frontier}: upper half of feasible set (including GMVP).
+
+\begin{wbox}
+Check: if \(\alpha^*\notin[0,1]\) and short-selling not allowed, the GMVP is the asset with lower \(\sigma\).
+\end{wbox}
+
+%% =====================================================================
+\section{6.\ Forwards \& Futures}
+
+\subsection{Forward Contract}
+Obligation to buy/sell at forward price \(F(t,T)\) at maturity \(T\).
+\begin{itemize}
+  \item Long payoff: \(S_T-F(t,T)\)
+  \item Short payoff: \(F(t,T)-S_T\)
+  \item Costs nothing to enter (no premium)
+\end{itemize}
+
+\subsection{Forward Pricing (No-Arbitrage)}
+\begin{kbox}
+\textbf{Non-dividend-paying asset:}
+\[F(0,T)=S_0 e^{rT}\ (\text{cts})\quad F(0,T)=S_0(1+r)^T\ (\text{disc})\]
+
+\textbf{General \(t\):} \(F(t,T)=S_t\,e^{r(T-t)}\)
+
+\textbf{With storage cost} \(c\) (lump sum at \(t=0\)):
+\[F(0,T)=(S_0+c)\,e^{rT}\]
+
+\textbf{With continuous dividend yield} \(q\):
+\[F(0,T)=S_0\,e^{(r-q)T}\]
+\end{kbox}
+
+\begin{wbox}
+Forward price does \textbf{not} depend on expected return \(\mu\) of the underlying --- only on \(S_0\), \(r\), \(T\) (and carry costs). This is a no-arbitrage result, not an expectation.
+\end{wbox}
+
+\subsection{Arbitrage Construction}
+If \(F(0,T)>S_0e^{rT}\): short forward, buy asset (borrow \(S_0\)). Profit at \(T\): \(F-S_0e^{rT}>0\).\\
+If \(F(0,T)<S_0e^{rT}\): long forward, short-sell asset (invest proceeds). Profit at \(T\): \(S_0e^{rT}-F>0\).
+
+\subsection{Futures vs.\ Forwards}
+\begin{tabular}{@{}lll@{}}
+\toprule
+ & Forward & Futures\\
+\midrule
+Settlement & At maturity & Daily MTM\\
+Counterparty & Bilateral & Exchange\\
+\bottomrule
+\end{tabular}
+
+Daily P\&L long futures: \(\approx F_{t+1}-F_t\) (margin account).
+
+\subsection{Margin Account}
+Initial margin deposited. If balance falls below \textbf{maintenance margin}, margin call issued (top up to initial margin).
+
+%% =====================================================================
+\section{7.\ Hedging}
+
+\subsection{Perfect Hedge (Forwards/Futures)}
+Enter opposite position to fix price and eliminate risk. Conditions for perfect futures hedge: (1) delivery date matches; (2) same underlying; (3) integer multiple of contract size; (4) sufficient liquidity.
+
+\subsection{Hedging Direction ($\rho>0$)}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Obligation & Futures action\\
+\midrule
+Buy asset A & Short futures B\\
+Sell asset A & Long futures B\\
+\bottomrule
+\end{tabular}
+\quad If $\rho<0$: reverse direction.
+
+\subsection{Minimum-Variance Hedge}
+Hedge \(W\) units of asset A using futures on asset B (correlated). Short \(h\) futures contracts.
+
+Cash flow at \(T\): \(y=-WS_T+(F_T-F_0)h\)
+
+\[\text{Var}(y)=W^2\text{Var}(S_T)-2W\text{Cov}(S_T,F_T)h+\text{Var}(F_T)h^2\]
+
+\begin{kbox}
+\textbf{Optimal hedge ratio:}
+\[h^*=W\cdot\frac{\text{Cov}(S_T,F_T)}{\text{Var}(F_T)}=W\cdot\frac{\rho_{S,F}\,\sigma_S}{\sigma_F}\]
+
+\textbf{Minimum variance:}
+\[\text{Var}^*(y)=W^2\text{Var}(S_T)(1-\rho_{S,F}^2)\]
+
+Hedge effectiveness: \(\rho_{S,F}^2\). Factor \(\sqrt{1-\rho^2}\) measures residual risk.
+\end{kbox}
+
+\begin{wbox}
+\(h^*\) is in \emph{units}, not contracts. Number of contracts \(= h^*/(\text{contract size})\). Round to integer for real problems.
+\end{wbox}
+
+%% =====================================================================
+\section{8.\ Options}
+
+\subsection{Key Definitions}
+\textbf{Call}: right to \emph{buy} at strike \(K\).\quad\textbf{Put}: right to \emph{sell} at strike \(K\).
+
+Long = holder (pays premium); Short = writer (receives premium).
+
+European: exercise only at \(T\). American: exercise any time \(\le T\). (Assume European unless stated.)
+
+\subsection{Payoffs \& Profits}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Position & Payoff at \(T\) & Profit\\
+\midrule
+Long call & \(\max(S_T-K,0)\) & payoff \(-C e^{rT}\)\\
+Short call & \(-\max(S_T-K,0)\) & payoff \(+C e^{rT}\)\\
+Long put & \(\max(K-S_T,0)\) & payoff \(-P e^{rT}\)\\
+Short put & \(-\max(K-S_T,0)\) & payoff \(+P e^{rT}\)\\
+\bottomrule
+\end{tabular}
+
+\(C, P\) = option premium (time-0 price). Time-value of premium at \(T\): \(Ce^{rT}\) or \(P e^{rT}\).
+
+\subsection{Bounds}
+\textbf{Upper bounds:} \(C\le S_0\)\qquad\(P\le Ke^{-rT}\)
+
+\textbf{Lower bounds:}
+\[C\ge\max(0,\;S_0-Ke^{-rT})\qquad P\ge\max(0,\;Ke^{-rT}-S_0)\]
+
+\begin{kbox}
+\textbf{Put--Call Parity} (European, no dividends):
+\[C + Ke^{-rT} = P + S_0\]
+Proof: Portfolio A (long call + zero-coupon bond paying \(K\)) and Portfolio C (long put + stock) have identical payoffs \(\Rightarrow\) same price by no-arbitrage.
+\end{kbox}
+
+\subsection{Trading Strategies}
+\textbf{Bull spread:} Long call $K_1$ + Short call $K_2$, $K_1<K_2$. Profit if $S_T\uparrow$.
+
+\textbf{Bear spread:} Short call $K_1$ + Long call $K_2$ \emph{or} Long put $K_2$ + Short put $K_1$. Profit if $S_T\downarrow$.
+
+\textbf{Butterfly} ($K_1<K_2<K_3$, $K_1+K_3=2K_2$): Long $C_{K_1}$, Short $2C_{K_2}$, Long $C_{K_3}$:
+
+\begin{tabular}{@{}lll@{}}
+\toprule
+$S_T$ range & Payoff\\
+\midrule
+$S_T\le K_1$ & $0$\\
+$K_1<S_T\le K_2$ & $S_T-K_1$\\
+$K_2<S_T\le K_3$ & $K_3-S_T$\\
+$S_T>K_3$ & $0$\\
+\bottomrule
+\end{tabular}
+Profit if $S_T\approx K_2$ (low volatility bet).
+
+\textbf{Straddle:} Long call + Long put (same $K$, $T$). Profit if $|S_T-K|$ large.
+
+\textbf{Covered call:} Long stock + Short call.\quad\textbf{Protective put:} Long stock + Long put.
+
+\subsection{Binomial Option Pricing}
+Single period: $S\to uS$ or $dS$, risk-free rate $r$, $R=1+r$. No-arb requires $u>R>d$.
+
+\textbf{Risk-neutral probability:} $q=\dfrac{R-d}{u-d}$, $1-q=\dfrac{u-R}{u-d}$
+
+\begin{kbox}
+\[C=\frac{1}{R}[q\,C_u+(1-q)\,C_d]\]
+\end{kbox}
+$C_u=\max(uS-K,0)$, $C_d=\max(dS-K,0)$ for call; $\max(K-\cdot,0)$ for put.
+
+\textbf{Multi-period:} backward induction. Each node same formula. \textbf{CRR:} $u=e^{\sigma\sqrt{\Delta t}}$, $d=1/u$.
+
+\subsection{Replication Portfolio (Binomial)}
+Construct portfolio: $x$ shares + $b$ in risk-free cash. Payoffs:
+\[\text{up: }ux+Rb=C_u\qquad\text{down: }dx+Rb=C_d\]
+Solve:
+\begin{kbox}
+\[x=\frac{C_u-C_d}{u-d}\qquad b=\frac{uC_d-dC_u}{R(u-d)}\]
+\[C=x+b=\frac{qC_u+(1-q)C_d}{R}\quad\checkmark\]
+\end{kbox}
+Arbitrage: if $C>x+b$: short call, long portfolio. If $C<x+b$: long call, short portfolio.
+
+\subsection{Put--Call Parity (General Form)}
+Let $d$ = discount factor to maturity. Slides notation:
+\begin{kbox}
+\[C + dK = P + S_0\]
+\end{kbox}
+Discrete: $d=(1+r)^{-T}$.\quad Continuous: $d=e^{-rT}$.\\
+Rearrange to find arbitrage: if $C+dK\neq P+S_0$, one side is cheap.
+
+\subsection{Black--Scholes (Intro Only)}
+Stock GBM: $dS=\mu S\,dt+\sigma S\,dz$. CRR $\to$ B--S as $\Delta t\to 0$: $u=e^{\sigma\sqrt{\Delta t}}$, $d=1/u$.
+
+%% =====================================================================
+\section{Exam Patterns (Midterm)}
+
+\begin{wbox}
+\textbf{Q1 type --- PV algebra:} Set up PV equation, let \(v=(1+r)^{-1}\) or \(x=(1+r)^{-2k}\), solve quadratic/polynomial. Answer in terms of \(k\).
+
+\textbf{Q2 type --- Loan refinancing:}
+(i) Use annuity formula to find \(L/X\) (match \(L=\)PV of annuity).
+(ii) Find balance after \(m\) payments. Convert interest rate to \emph{effective per period}. New annuity equation for \(Y\).
+\textbf{Key trap:} Lump sum paid immediately, then first instalment one month later (ordinary annuity shifted by 1 month in timeline).
+
+\textbf{Q3 type --- Variable-coupon bond + \(R\neq F\):} Split into 4 annuity blocks (10 semi-annual payments each at different rates). Write PV equation with \(P\) on both sides (since \(R=P+20\)), solve linear equation.
+
+\textbf{Q4 type --- Newton--Raphson for bond yield:}
+Set \(f(\lambda)=\text{PV of cash flows at }\lambda - P_{\text{market}}\). Compute \(f(0)\) as a starting check, choose \(\lambda_0\) near expected answer, iterate 1--2 times for 4 d.p.
+\end{wbox}
+
+\subsection{Common Mistakes}
+\begin{itemize}
+  \item Using nominal rate directly in annuity formula without converting
+  \item Forgetting that annuity-due \(=\) ordinary annuity \(\times(1+r)\)
+  \item Coupon = \(cF/m\) (not \(cF\)) for semi-annual bonds
+  \item Duration: weight by PV, not raw cash flow
+  \item Forward price: uses \emph{risk-free} rate \(r\), not expected return \(\mu\)
+  \item Put--call parity: discount factor is \(e^{-rT}\) (continuous) or \((1+r)^{-T}\) (discrete)
+\end{itemize}
+
+\end{multicols}
+\end{document}
