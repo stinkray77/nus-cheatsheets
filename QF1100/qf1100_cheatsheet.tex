@@ -74,7 +74,7 @@
   }}
 \vspace{0.8mm}
 
-\begin{multicols}{4}
+\begin{multicols*}{4}
   \scriptsize
 
   %% =====================================================================
@@ -245,7 +245,7 @@
   \[D=\frac{\sum_{i=1}^n t_i\cdot\mathrm{PV}(c_i,t_i)}{\mathrm{PV}(C)}=\sum_{i=1}^n w_i t_i,\quad w_i=\frac{\mathrm{PV}(c_i)}{\mathrm{PV}(C)}\]
 
   \textbf{Special cases} ($\mu=\lambda/m$, $\gamma=c/m$):
-  Zero-coupon: $D=T$.\quad Perpetuity ($m=1$): $D=(1+\lambda)/\lambda$.
+  Zero-coupon: $D=T$.\quad Perpetuity : $D=(1+\lambda / m)/\lambda$.
 
   \begin{kbox}
     \textbf{Coupon bond, $F=R$ (general):}
@@ -300,20 +300,21 @@
 
   \textbf{Short sell:} \(R_{\text{short}}=P_1/P_0\) (same formula -- negatives cancel).
 
-  \subsection{Random Returns \& Key Identities}
-  Mean: $\mu_i=E(r_i)$\quad Variance: $\sigma_i^2=\text{Var}(r_i)$
+  \subsection{Definitions \& Identities}
+  $\text{Var}(X)=E[X^2]-E[X]^2$\quad $\text{Cov}(X,Y)=E[XY]-E[X]E[Y]$\quad $\rho_{XY}=\dfrac{\text{Cov}(X,Y)}{\sigma_X\sigma_Y}$
 
-  Covariance: $\sigma_{ij}=\text{Cov}(r_i,r_j)$\quad Correlation: $\rho_{ij}=\dfrac{\sigma_{ij}}{\sigma_i\sigma_j}$
+  \textbf{Expectation (linearity):} $E(c)=c$;\; $E(cX)=cE(X)$;\; $E(X+c)=E(X)+c$;\; $E(aX+bY)=aE(X)+bE(Y)$
 
-  \textbf{Var/Cov identities:}
-  \begin{itemize}
-    \item $\text{Var}(aX+b)=a^2\text{Var}(X)$
-    \item $\text{Cov}(aX,bY)=ab\,\text{Cov}(X,Y)$
-    \item $\text{Var}(X+Y)=\text{Var}(X)+\text{Var}(Y)+2\text{Cov}(X,Y)$
-    \item $\text{Var}(X-Y)=\text{Var}(X)+\text{Var}(Y)-2\text{Cov}(X,Y)$
-  \end{itemize}
+  \textbf{Variance:} $\text{Var}(aX+b)=a^2\text{Var}(X)$;\quad $\text{Var}(X\pm Y)=\text{Var}(X)+\text{Var}(Y)\pm2\text{Cov}(X,Y)$
 
-  \textbf{Short-sell gain} (sell at $P_0$, buy back at $P_1$): profit $= P_0-P_1$. Rate of return $= (P_0-P_1)/P_0 = 1 - P_1/P_0 = -r_{\text{long}}$.\quad \textbf{Loss is unlimited.}
+  \textbf{Covariance:} $\text{Cov}(X,Y)=\text{Cov}(Y,X)$;\; $\text{Cov}(X,X)=\text{Var}(X)$;\; $\text{Cov}(aX,bY)=ab\,\text{Cov}(X,Y)$
+
+  \textbf{Bilinearity:} $\text{Cov}(aX+bY,Z)=a\,\text{Cov}(X,Z)+b\,\text{Cov}(Y,Z)$
+
+  Indep $\Rightarrow$ $\text{Cov}=0$;\quad $\text{Cov}=0 \not\Rightarrow$ indep.
+
+  \subsection{Asset Returns (notation)}
+  Mean: $\mu_i=E(r_i)$;\; Var: $\sigma_i^2$;\; Cov: $\sigma_{ij}=\text{Cov}(r_i,r_j)$\quad\textbf{Short-sell}: profit $=P_0-P_1$, return $=-r_{\text{long}}$, loss unlimited.
 
   \subsection{Portfolio of 2 Assets}
   Weights \(w_1=\alpha\), \(w_2=1-\alpha\) (\(\alpha\in\mathbb{R}\) if short-selling allowed; \(\alpha\in[0,1]\) otherwise).
@@ -451,30 +452,110 @@
   \textbf{Lower bounds:}
   \[C\ge\max(0,\;S_0-Ke^{-rT})\qquad P\ge\max(0,\;Ke^{-rT}-S_0)\]
 
+  \subsection{Bounds Arbitrage}
+  \textbf{$C>S_0$:} short call, long stock.\\
+  {\tiny\begin{tabular}{@{}llll@{}}
+    \toprule
+                   & $t{=}0$   & $S_T{>}K$  & $S_T{\le}K$ \\
+    \midrule
+    Short call     & $+C$      & $-(S_T-K)$ & $0$         \\
+    Long stock     & $-S_0$    & $+S_T$     & $+S_T$      \\
+    \midrule
+    \textbf{Total} & $C-S_0>0$ & $+K>0$     & $S_T\ge0$   \\
+    \bottomrule
+  \end{tabular}}
+
+  \textbf{$P>Ke^{-rT}$:} short put, invest $Ke^{-rT}$.\\
+  {\tiny\begin{tabular}{@{}llll@{}}
+    \toprule
+                   & $t{=}0$        & $S_T{<}K$  & $S_T{\ge}K$ \\
+    \midrule
+    Short put      & $+P$           & $-(K-S_T)$ & $0$         \\
+    Bond           & $-Ke^{-rT}$    & $+K$       & $+K$        \\
+    \midrule
+    \textbf{Total} & $P-Ke^{-rT}>0$ & $S_T\ge0$  & $+K>0$      \\
+    \bottomrule
+  \end{tabular}}
+
+  \textbf{$C<S_0-Ke^{-rT}$:} short stock, long call, invest $S_0-C$ [$I\equiv(S_0{-}C)e^{rT}$].\\
+  {\tiny\begin{tabular}{@{}llll@{}}
+    \toprule
+                   & $t{=}0$      & $S_T{\ge}K$  & $S_T{<}K$ \\
+    \midrule
+    Short stock    & $+S_0$       & $-S_T$       & $-S_T$    \\
+    Long call      & $-C$         & $+(S_T{-}K)$ & $0$       \\
+    Invest         & $-(S_0{-}C)$ & $+I$         & $+I$      \\
+    \midrule
+    \textbf{Total} & $0$          & $I-K>0$      & $I-S_T>0$ \\
+    \bottomrule
+  \end{tabular}}
+
+  \textbf{$P<Ke^{-rT}-S_0$:} long put, long stock, borrow $S_0+P$ [$B\equiv(S_0{+}P)e^{rT}$].\\
+  {\tiny\begin{tabular}{@{}llll@{}}
+    \toprule
+                   & $t{=}0$      & $S_T{<}K$    & $S_T{\ge}K$ \\
+    \midrule
+    Long put       & $-P$         & $+(K{-}S_T)$ & $0$         \\
+    Long stock     & $-S_0$       & $+S_T$       & $+S_T$      \\
+    Borrow         & $+(S_0{+}P)$ & $-B$         & $-B$        \\
+    \midrule
+    \textbf{Total} & $0$          & $K-B>0$      & $S_T-B\ge0$ \\
+    \bottomrule
+  \end{tabular}}
+
   \begin{kbox}
     \textbf{Put--Call Parity} (European, no dividends):
     \[C + Ke^{-rT} = P + S_0\]
-    Proof: Portfolio A (long call + zero-coupon bond paying \(K\)) and Portfolio C (long put + stock) have identical payoffs \(\Rightarrow\) same price by no-arbitrage.
+    {\tiny\begin{tabular}{@{}lllll@{}}
+      \toprule
+               &                & $t{=}T$   &           \\
+               &                & $S_T{>}K$ & $S_T{<}K$ \\
+      \midrule
+      Port.\ A & Call           & $S_T-K$   & $0$       \\
+               & ZC bond ($K$)  & $K$       & $K$       \\
+               & \textit{Total} & $S_T$     & $K$       \\
+      \midrule
+      Port.\ C & Put            & $0$       & $K-S_T$   \\
+               & Share          & $S_T$     & $S_T$     \\
+               & \textit{Total} & $S_T$     & $K$       \\
+      \bottomrule
+    \end{tabular}}\\
+    Same payoff $\Rightarrow$ $PV_A=PV_C$: $C+dK=P+S_0$.
   \end{kbox}
 
+  \subsection{Put--Call Parity (General Form)}
+  Let $d$ = discount factor to maturity. Slides notation:
+  \begin{kbox}
+    \[C + dK = P + S_0\]
+  \end{kbox}
+  Discrete: $d=(1+r)^{-T}$.\quad Continuous: $d=e^{-rT}$.\\
+  Rearrange to find arbitrage: if $C+dK\neq P+S_0$, one side is cheap.
+
   \subsection{Trading Strategies}
-  \textbf{Bull spread:} Long call $K_1$ + Short call $K_2$, $K_1<K_2$. Profit if $S_T\uparrow$.
-
-  \textbf{Bear spread:} Short call $K_1$ + Long call $K_2$ \emph{or} Long put $K_2$ + Short put $K_1$. Profit if $S_T\downarrow$.
-
-  \textbf{Butterfly} ($K_1<K_2<K_3$, $K_1+K_3=2K_2$): Long $C_{K_1}$, Short $2C_{K_2}$, Long $C_{K_3}$:
-
-  \begin{tabular}{@{}lll@{}}
+  \textbf{Bull spread:} Long $C_{K_1}$ + Short $C_{K_2}$, $K_1<K_2$. Capitalise on price increase, cap max profit to reduce cost \& risk.\\
+  {\tiny\begin{tabular}{@{}llll@{}}
     \toprule
-    $S_T$ range      & Payoff    \\
+    $S_T$ range   & Long $C_{K_1}$ & Short $C_{K_2}$ & Total     \\
     \midrule
-    $S_T\le K_1$     & $0$       \\
-    $K_1<S_T\le K_2$ & $S_T-K_1$ \\
-    $K_2<S_T\le K_3$ & $K_3-S_T$ \\
-    $S_T>K_3$        & $0$       \\
+    $S_T\le K_1$  & $0$            & $0$             & $0$       \\
+    $K_1<S_T<K_2$ & $S_T-K_1$      & $0$             & $S_T-K_1$ \\
+    $S_T\ge K_2$  & $S_T-K_1$      & $K_2-S_T$       & $K_2-K_1$ \\
     \bottomrule
-  \end{tabular}
-  Profit if $S_T\approx K_2$ (low volatility bet).
+  \end{tabular}}
+
+  \textbf{Bear spread:} Short $C_{K_1}$ + Long $C_{K_2}$ \emph{or} Long $P_{K_2}$ + Short $P_{K_1}$. Profit if $S_T\downarrow$.
+
+  \textbf{Butterfly} ($K_1{<}K_2{<}K_3$, $2K_2{=}K_1{+}K_3$): Long $C_{K_1}$, Short $2C_{K_2}$, Long $C_{K_3}$. Low-vol bet ($S_T\approx K_2$).\\
+  {\tiny\begin{tabular}{@{}lllll@{}}
+    \toprule
+    $S_T$ range      & $C_{K_1}$ & $C_{K_3}$ & $-2C_{K_2}$   & Total     \\
+    \midrule
+    $S_T\le K_1$     & $0$       & $0$       & $0$           & $0$       \\
+    $K_1<S_T\le K_2$ & $S_T-K_1$ & $0$       & $0$           & $S_T-K_1$ \\
+    $K_2<S_T< K_3$   & $S_T-K_1$ & $0$       & $-2(S_T-K_2)$ & $K_3-S_T$ \\
+    $S_T\ge K_3$     & $S_T-K_1$ & $S_T-K_3$ & $-2(S_T-K_2)$ & $0$       \\
+    \bottomrule
+  \end{tabular}}
 
   \textbf{Straddle:} Long call + Long put (same $K$, $T$). Profit if $|S_T-K|$ large.
 
@@ -501,14 +582,6 @@
     \[C=x+b=\frac{qC_u+(1-q)C_d}{R}\quad\checkmark\]
   \end{kbox}
   Arbitrage: if $C>x+b$: short call, long portfolio. If $C<x+b$: long call, short portfolio.
-
-  \subsection{Put--Call Parity (General Form)}
-  Let $d$ = discount factor to maturity. Slides notation:
-  \begin{kbox}
-    \[C + dK = P + S_0\]
-  \end{kbox}
-  Discrete: $d=(1+r)^{-T}$.\quad Continuous: $d=e^{-rT}$.\\
-  Rearrange to find arbitrage: if $C+dK\neq P+S_0$, one side is cheap.
 
   \subsection{Black--Scholes (Intro Only)}
   Stock GBM: $dS=\mu S\,dt+\sigma S\,dz$. CRR $\to$ B--S as $\Delta t\to 0$: $u=e^{\sigma\sqrt{\Delta t}}$, $d=1/u$.
@@ -540,5 +613,5 @@
     \item Put--call parity: discount factor is \(e^{-rT}\) (continuous) or \((1+r)^{-T}\) (discrete)
   \end{itemize}
 
-\end{multicols}
+\end{multicols*}
 \end{document}
