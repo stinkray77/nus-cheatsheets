@@ -1,2 +1,9 @@
 # nus-cheatsheets
-A repository of cheatsheets for modules I have taken over my undergraduate curriculum in NUS Computer Science
+A repository of cheatsheets for modules taken in NUS
+
+## Contents
+
+- [x] **AY25/26 S1**
+  - 
+- [x] **AY25/26 S2**
+  - QF1100: Introduction to Quantitative Finance
