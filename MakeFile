@@ -1,0 +1,4 @@
+all:
+    for dir in */; do \
+        pdflatex -output-directory=$$dir $$dir/cheatsheet.tex; \
+    done
