@@ -69,10 +69,10 @@
 % ---- title bar ----
 \noindent\colorbox{hdr}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
     \color{white}\bfseries\small
-    QF1100 Introduction to Quantitative Finance --- Final Exam Cheatsheet
-    \hfill \href{https://github.com/stinkray77}{@stinkray77} \quad AY2025/2026
+    QF1100 Introduction to Quantitative Finance --- Final Exam Cheatsheet \href{https://github.com/stinkray77}{@stinkray77}
+    \hfill \quad AY2025/2026 Sem 2
   }}
-\vspace{0.8mm}
+\vspace{0.1mm}
 
 \begin{multicols*}{4}
   \scriptsize
@@ -524,12 +524,42 @@
   \end{kbox}
 
   \subsection{Put--Call Parity (General Form)}
-  Let $d$ = discount factor to maturity. Slides notation:
+  Let $d$ = discount factor. Discrete: $d=(1+r)^{-T}$. Continuous: $d=e^{-rT}$.
   \begin{kbox}
     \[C + dK = P + S_0\]
   \end{kbox}
-  Discrete: $d=(1+r)^{-T}$.\quad Continuous: $d=e^{-rT}$.\\
-  Rearrange to find arbitrage: if $C+dK\neq P+S_0$, one side is cheap.
+
+  \textbf{PCP Arbitrage} (if parity violated):
+
+  \textbf{$PV_A < PV_C$} ($C+dK < P+S_0$): Port.\ A cheap --- buy call, short put, short stock, invest $S_0+P-C$.\\
+  {\tiny\begin{tabular}{@{}llll@{}}
+    \toprule
+                         & $t{=}0$          & $S_T{>}K$         & $S_T{\le}K$       \\
+    \midrule
+    Long call            & $-C$             & $+(S_T{-}K)$      & $0$               \\
+    Short put            & $+P$             & $0$               & $-(K{-}S_T)$      \\
+    Short stock          & $+S_0$           & $-S_T$            & $-S_T$            \\
+    Invest $S_0{+}P{-}C$ & $-(S_0{+}P{-}C)$ & $+Ie^{rT}$        & $+Ie^{rT}$        \\
+    \midrule
+    \textbf{Total}       & $0$              & $Ie^{rT}{-}K{>}0$ & $Ie^{rT}{-}K{>}0$ \\
+    \bottomrule
+  \end{tabular}}\\
+  where $I=S_0+P-C>dK$, so $Ie^{rT}>K$.
+
+  \textbf{$PV_A > PV_C$} ($C+dK > P+S_0$): Port.\ C cheap --- short call, buy put, buy stock, borrow $S_0+P-C$.\\
+  {\tiny\begin{tabular}{@{}llll@{}}
+    \toprule
+                         & $t{=}0$          & $S_T{>}K$         & $S_T{\le}K$       \\
+    \midrule
+    Short call           & $+C$             & $-(S_T{-}K)$      & $0$               \\
+    Long put             & $-P$             & $0$               & $+(K{-}S_T)$      \\
+    Long stock           & $-S_0$           & $+S_T$            & $+S_T$            \\
+    Borrow $S_0{+}P{-}C$ & $+(S_0{+}P{-}C)$ & $-Ie^{rT}$        & $-Ie^{rT}$        \\
+    \midrule
+    \textbf{Total}       & $0$              & $K{-}Ie^{rT}{>}0$ & $K{-}Ie^{rT}{>}0$ \\
+    \bottomrule
+  \end{tabular}}\\
+  where $I=S_0+P-C<dK$, so $Ie^{rT}<K$. Net profit $=K-Ie^{rT}>0$ in all cases.
 
   \subsection{Trading Strategies}
   \textbf{Bull spread:} Long $C_{K_1}$ + Short $C_{K_2}$, $K_1<K_2$. Capitalise on price increase, cap max profit to reduce cost \& risk.\\
@@ -583,26 +613,7 @@
   \end{kbox}
   Arbitrage: if $C>x+b$: short call, long portfolio. If $C<x+b$: long call, short portfolio.
 
-  \subsection{Black--Scholes (Intro Only)}
-  Stock GBM: $dS=\mu S\,dt+\sigma S\,dz$. CRR $\to$ B--S as $\Delta t\to 0$: $u=e^{\sigma\sqrt{\Delta t}}$, $d=1/u$.
-
   %% =====================================================================
-  \section{Exam Patterns (Midterm)}
-
-  \begin{wbox}
-    \textbf{Q1 type --- PV algebra:} Set up PV equation, let \(v=(1+r)^{-1}\) or \(x=(1+r)^{-2k}\), solve quadratic/polynomial. Answer in terms of \(k\).
-
-    \textbf{Q2 type --- Loan refinancing:}
-    (i) Use annuity formula to find \(L/X\) (match \(L=\)PV of annuity).
-    (ii) Find balance after \(m\) payments. Convert interest rate to \emph{effective per period}. New annuity equation for \(Y\).
-    \textbf{Key trap:} Lump sum paid immediately, then first instalment one month later (ordinary annuity shifted by 1 month in timeline).
-
-    \textbf{Q3 type --- Variable-coupon bond + \(R\neq F\):} Split into 4 annuity blocks (10 semi-annual payments each at different rates). Write PV equation with \(P\) on both sides (since \(R=P+20\)), solve linear equation.
-
-    \textbf{Q4 type --- Newton--Raphson for bond yield:}
-    Set \(f(\lambda)=\text{PV of cash flows at }\lambda - P_{\text{market}}\). Compute \(f(0)\) as a starting check, choose \(\lambda_0\) near expected answer, iterate 1--2 times for 4 d.p.
-  \end{wbox}
-
   \subsection{Common Mistakes}
   \begin{itemize}
     \item Using nominal rate directly in annuity formula without converting
