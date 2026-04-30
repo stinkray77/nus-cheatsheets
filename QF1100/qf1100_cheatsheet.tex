@@ -289,7 +289,7 @@
   \subsection{Yield Curve Shapes}
   Normal (upward): economic expansion, low inflation.\\
   Inverted (downward): pre-recession, high inflation.\\
-  Flat term structure: all \(s_t\) equal \(\Rightarrow\) force of interest is constant.
+  Flat term structure: all $s_t=r$ equal. \textbf{Proof} ($\delta$ constant): continuous compounding $\Rightarrow a(t)=e^{rt}$, so $\delta(t)=a'(t)/a(t)=re^{rt}/e^{rt}=r$. Semiannual: $(1+s_t/2)^2=e^{r_t}$; if $s_t$ constant then $r_t$ constant and vice versa. $\checkmark$
 
   %% =====================================================================
   \section{5.\ Asset Returns \& Portfolios}
@@ -332,6 +332,11 @@
 
   \textbf{Efficient frontier}: upper half of feasible set (including GMVP).
 
+  \subsection{Constrained GMVP ($\mu_p\ge\bar\mu$)}
+  If $\bar\mu>\mu_{\text{GMVP}}$, constraint is binding: set $\mu_p=\bar\mu$, solve $\alpha=\frac{\bar\mu-\mu_2}{\mu_1-\mu_2}$, substitute into $\sigma_p^2$.
+
+  \textbf{No short-selling} ($\alpha\in[0,1]$): if unconstrained $\alpha^*\notin[0,1]$, GMVP is the asset with lower $\sigma$.
+
   \begin{wbox}
     Check: if \(\alpha^*\notin[0,1]\) and short-selling not allowed, the GMVP is the asset with lower \(\sigma\).
   \end{wbox}
@@ -354,11 +359,10 @@
 
     \textbf{General \(t\):} \(F(t,T)=S_t\,e^{r(T-t)}\)
 
-    \textbf{With storage cost} \(c\) (lump sum at \(t=0\)):
+    \textbf{With storage cost} (lump sum $c$ at $t=0$):
     \[F(0,T)=(S_0+c)\,e^{rT}\]
 
-    \textbf{With continuous dividend yield} \(q\):
-    \[F(0,T)=S_0\,e^{(r-q)T}\]
+    \textbf{With periodic storage} (payments $c$ at $t=0,\Delta,2\Delta,\ldots$): compute directly as annuity-due discounted to $t=0$.
   \end{kbox}
 
   \begin{wbox}
@@ -381,8 +385,18 @@
 
   Daily P\&L long futures: \(\approx F_{t+1}-F_t\) (margin account).
 
-  \subsection{Margin Account}
-  Initial margin deposited. If balance falls below \textbf{maintenance margin}, margin call issued (top up to initial margin).
+  \subsection{Margin Account \& Mark-to-Market}
+  \textbf{Setup:} $N$ contracts, contract size $Q$, futures price $F_t$.
+
+  \textbf{Daily MTM:} Gain/loss $=(F_t-F_{t-1})\times Q\times N$ (positive for long, negative for short).
+
+  \textbf{Margin call:} If balance $<$ maintenance margin $\Rightarrow$ top up to \emph{initial} margin. Top-up $=$ initial $-$ current balance.
+
+  \textbf{Total contract value} $=F_0\times Q\times N$.\quad Initial margin $=$ fraction $\times$ TCV.\quad Maintenance margin $=$ fraction $\times$ TCV.
+
+  \begin{wbox}
+    Top up to \textbf{initial}, not maintenance. Missing this costs full marks.
+  \end{wbox}
 
   %% =====================================================================
   \section{7.\ Hedging}
@@ -391,15 +405,15 @@
   Enter opposite position to fix price and eliminate risk. Conditions for perfect futures hedge: (1) delivery date matches; (2) same underlying; (3) integer multiple of contract size; (4) sufficient liquidity.
 
   \subsection{Hedging Direction ($\rho>0$)}
-  \begin{tabular}{@{}ll@{}}
-    \toprule
-    Obligation   & Futures action  \\
-    \midrule
-    Buy asset A  & Short futures B \\
-    Sell asset A & Long futures B  \\
-    \bottomrule
-  \end{tabular}
-  \quad If $\rho<0$: reverse direction.
+  {\tiny\begin{tabular}{@{}llll@{}}
+      \toprule
+      Obligation   & Risk               & Action              & P\&L           \\
+      \midrule
+      Buy asset A  & Price $\uparrow$   & Long Futures $A/B$  & $+(F_T{-}F_0)$ \\
+      Sell asset A & Price $\downarrow$ & Short Futures $A/B$ & $+(F_0{-}F_T)$ \\
+      \bottomrule
+    \end{tabular}}\\
+  If $\rho_{A,B}<0$: reverse direction.
 
   \subsection{Minimum-Variance Hedge}
   Hedge \(W\) units of asset A using futures on asset B (correlated). Short \(h\) futures contracts.
@@ -615,16 +629,6 @@
 
   \textbf{$C > x+b$:} Short call, long $x$ shares, invest $b$. Net at $t{=}0$: $C-(x+b)>0$. At $T$: call payoff $-C_u$ or $-C_d$ cancels portfolio, leftover $= R(C-(x+b))>0$.
 
-  %% =====================================================================
-  \subsection{Common Mistakes}
-  \begin{itemize}
-    \item Using nominal rate directly in annuity formula without converting
-    \item Forgetting that annuity-due \(=\) ordinary annuity \(\times(1+r)\)
-    \item Coupon = \(cF/m\) (not \(cF\)) for semi-annual bonds
-    \item Duration: weight by PV, not raw cash flow
-    \item Forward price: uses \emph{risk-free} rate \(r\), not expected return \(\mu\)
-    \item Put--call parity: discount factor is \(e^{-rT}\) (continuous) or \((1+r)^{-T}\) (discrete)
-  \end{itemize}
 
 \end{multicols*}
 \end{document}
