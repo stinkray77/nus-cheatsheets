@@ -611,7 +611,9 @@
     \[x=\frac{C_u-C_d}{u-d}\qquad b=\frac{uC_d-dC_u}{R(u-d)}\]
     \[C=x+b=\frac{qC_u+(1-q)C_d}{R}\quad\checkmark\]
   \end{kbox}
-  Arbitrage: if $C>x+b$: short call, long portfolio. If $C<x+b$: long call, short portfolio.
+  \textbf{$C < x+b$:} Short $x$ shares, borrow $b$, buy call. Net at $t{=}0$: $(x+b)-C>0$. At $T$: portfolio payoff $-C_u$ or $-C_d$ cancels call payoff, leftover $= R((x+b)-C)>0$.
+
+  \textbf{$C > x+b$:} Short call, long $x$ shares, invest $b$. Net at $t{=}0$: $C-(x+b)>0$. At $T$: call payoff $-C_u$ or $-C_d$ cancels portfolio, leftover $= R(C-(x+b))>0$.
 
   %% =====================================================================
   \subsection{Common Mistakes}
